@@ -3,991 +3,518 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hopely — Host Database</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Hopely — Safe Housing for Those Who Need It Most</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --red: #C8102E;
-    --red-dark: #9B0D22;
-    --cream: #F2EDE4;
-    --cream-dark: #E8E1D6;
-    --pink: #F4C2C2;
-    --pink-light: #FDE8E8;
-    --text: #1A1A1A;
-    --text-muted: #6B6B6B;
-    --white: #FFFFFF;
-    --green: #2D8A5E;
-    --amber: #C97A1A;
-    --card-shadow: 0 2px 20px rgba(0,0,0,0.08);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--cream);
-    font-family: 'DM Sans', sans-serif;
-    color: var(--text);
-    min-height: 100vh;
-  }
-
-  /* HEADER */
-  header {
-    background: var(--white);
-    border-bottom: 2px solid var(--red);
-    padding: 0 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 64px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 900;
-    color: var(--red);
-    letter-spacing: -0.5px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .logo-heart { font-size: 18px; }
-
-  .header-badge {
-    background: var(--pink-light);
-    border: 1px solid var(--pink);
-    color: var(--red);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 20px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .header-stat {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 500;
-  }
-
-  .header-stat strong {
-    color: var(--red);
-    font-size: 15px;
-  }
-
-  /* MAIN LAYOUT */
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 32px 24px;
-  }
-
-  /* HERO STRIP */
-  .hero-strip {
-    background: var(--red);
-    color: var(--white);
-    border-radius: 16px;
-    padding: 28px 36px;
-    margin-bottom: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-  }
-
-  .hero-strip h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 26px;
-    font-weight: 900;
-    line-height: 1.2;
-  }
-
-  .hero-strip p {
-    font-size: 13px;
-    opacity: 0.85;
-    margin-top: 6px;
-    max-width: 400px;
-  }
-
-  .hero-stats {
-    display: flex;
-    gap: 32px;
-    flex-shrink: 0;
-  }
-
-  .hero-stat {
-    text-align: center;
-  }
-
-  .hero-stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 32px;
-    font-weight: 900;
-    line-height: 1;
-  }
-
-  .hero-stat-label {
-    font-size: 11px;
-    opacity: 0.75;
-    margin-top: 3px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  /* FILTERS */
-  .filters-bar {
-    background: var(--white);
-    border-radius: 12px;
-    padding: 16px 20px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    box-shadow: var(--card-shadow);
-  }
-
-  .filter-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-  }
-
-  .filter-chips {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    flex: 1;
-  }
-
-  .chip {
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    border: 1.5px solid var(--cream-dark);
-    background: var(--cream);
-    color: var(--text-muted);
-    transition: all 0.15s;
-  }
-
-  .chip.active, .chip:hover {
-    background: var(--red);
-    border-color: var(--red);
-    color: var(--white);
-  }
-
-  .search-box {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--cream);
-    border: 1.5px solid var(--cream-dark);
-    border-radius: 8px;
-    padding: 7px 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    color: var(--text);
-    width: 200px;
-  }
-
-  /* GRID */
-  .section-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  .section-count {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 500;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 20px;
-    margin-bottom: 40px;
-  }
-
-  /* HOST CARD */
-  .card {
-    background: var(--white);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: var(--card-shadow);
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer;
-    animation: fadeUp 0.4s ease both;
-  }
-
-  .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .card:nth-child(1) { animation-delay: 0.05s; }
-  .card:nth-child(2) { animation-delay: 0.1s; }
-  .card:nth-child(3) { animation-delay: 0.15s; }
-  .card:nth-child(4) { animation-delay: 0.2s; }
-  .card:nth-child(5) { animation-delay: 0.25s; }
-  .card:nth-child(6) { animation-delay: 0.3s; }
-
-  .card-header {
-    padding: 20px 20px 14px;
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
-  }
-
-  .avatar {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-    font-weight: 700;
-    font-family: 'Playfair Display', serif;
-  }
-
-  .card-info { flex: 1; min-width: 0; }
-
-  .card-name {
-    font-weight: 600;
-    font-size: 16px;
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .verified-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    background: #E8F5ED;
-    color: var(--green);
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 7px;
-    border-radius: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-  }
-
-  .card-location {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 3px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .card-location::before { content: "📍"; font-size: 10px; }
-
-  .availability-tag {
-    font-size: 11px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 20px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .avail-now { background: #E8F5ED; color: var(--green); }
-  .avail-soon { background: #FFF4E0; color: var(--amber); }
-  .avail-full { background: #F5E8E8; color: var(--red); }
-
-  .card-body {
-    padding: 0 20px 16px;
-    border-top: 1px solid var(--cream);
-    margin-top: 4px;
-  }
-
-  .card-details {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    padding-top: 14px;
-  }
-
-  .detail-item {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .detail-label {
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    color: var(--text-muted);
-  }
-
-  .detail-value {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
-  }
-
-  .card-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding-top: 12px;
-  }
-
-  .tag {
-    font-size: 11px;
-    background: var(--cream);
-    color: var(--text-muted);
-    padding: 3px 9px;
-    border-radius: 6px;
-    font-weight: 500;
-  }
-
-  .tag.red { background: var(--pink-light); color: var(--red); }
-  .tag.green { background: #E8F5ED; color: var(--green); }
-
-  .card-footer {
-    background: var(--cream);
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .card-id {
-    font-size: 10px;
-    color: var(--text-muted);
-    font-weight: 500;
-    font-family: 'DM Sans', monospace;
-    letter-spacing: 0.3px;
-  }
-
-  .match-score {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--red);
-  }
-
-  .match-dots {
-    display: flex;
-    gap: 2px;
-  }
-
-  .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--cream-dark);
-  }
-
-  .dot.filled { background: var(--red); }
-
-  /* LEGEND */
-  .legend {
-    background: var(--white);
-    border-radius: 12px;
-    padding: 20px 24px;
-    margin-bottom: 24px;
-    box-shadow: var(--card-shadow);
-    display: flex;
-    align-items: center;
-    gap: 32px;
-    flex-wrap: wrap;
-  }
-
-  .legend-title {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-muted);
-    white-space: nowrap;
-  }
-
-  .legend-items {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text);
-  }
-
-  .legend-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .legend-dot.green { background: var(--green); }
-  .legend-dot.amber { background: var(--amber); }
-  .legend-dot.red-dot { background: var(--red); }
-
-  /* MODAL */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-  }
-
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--white);
-    border-radius: 20px;
-    max-width: 560px;
-    width: 100%;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    animation: modalIn 0.25s ease;
-  }
-
-  @keyframes modalIn {
-    from { opacity: 0; transform: scale(0.95) translateY(10px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
-  }
-
-  .modal-top {
-    background: var(--red);
-    padding: 28px 28px 24px;
-    color: white;
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .modal-avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    flex-shrink: 0;
-    background: rgba(255,255,255,0.2);
-    border: 2px solid rgba(255,255,255,0.4);
-  }
-
-  .modal-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; }
-  .modal-sub { font-size: 13px; opacity: 0.85; margin-top: 4px; }
-  .modal-close {
-    margin-left: auto;
-    background: rgba(255,255,255,0.2);
-    border: none;
-    color: white;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .modal-body { padding: 24px 28px; }
-
-  .modal-row {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-
-  .modal-field {
-    flex: 1;
-    background: var(--cream);
-    border-radius: 10px;
-    padding: 12px 14px;
-  }
-
-  .modal-field-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-muted);
-    margin-bottom: 4px;
-  }
-
-  .modal-field-value {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .modal-notes {
-    background: var(--pink-light);
-    border: 1px solid var(--pink);
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-bottom: 20px;
-    font-size: 13px;
-    line-height: 1.5;
-    color: var(--text);
-  }
-
-  .modal-notes strong {
-    display: block;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--red);
-    margin-bottom: 4px;
-  }
-
-  .modal-btn {
-    width: 100%;
-    background: var(--red);
-    color: var(--white);
-    border: none;
-    border-radius: 10px;
-    padding: 14px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    letter-spacing: 0.3px;
-    transition: background 0.15s;
-  }
-
-  .modal-btn:hover { background: var(--red-dark); }
-
-  /* FOOTER */
-  footer {
-    background: var(--text);
-    color: rgba(255,255,255,0.5);
-    text-align: center;
-    padding: 20px;
-    font-size: 11px;
-    margin-top: 16px;
-  }
-
-  footer strong { color: rgba(255,255,255,0.85); }
-
-  @media (max-width: 600px) {
-    .hero-strip { flex-direction: column; align-items: flex-start; }
-    .hero-stats { gap: 20px; }
-    .grid { grid-template-columns: 1fr; }
-    .modal-row { flex-direction: column; }
-    header { padding: 0 16px; }
-    .container { padding: 20px 16px; }
-  }
+:root {
+  --red: #C8102E; --red-dark: #9B0D22; --cream: #F5EFE6; --cream-dark: #E8DDD0;
+  --pink: #F4C2C2; --pink-light: #FDE8E8; --text: #1C1C1C; --text-muted: #7A7068;
+  --white: #FFFFFF; --green: #1E7C50; --green-bg: #E4F5EC; --amber: #B56C0C; --amber-bg: #FFF0D9;
+  --shadow: 0 2px 24px rgba(0,0,0,0.08); --shadow-lg: 0 8px 40px rgba(0,0,0,0.14);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--cream); min-height: 100vh; }
+
+.quick-exit {
+  position: fixed; top: 60px; right: 16px; z-index: 9999;
+  background: var(--red-dark); color: #fff; border: none; border-radius: 10px;
+  padding: 10px 18px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; letter-spacing: 0.3px; box-shadow: 0 4px 20px rgba(200,16,46,0.45);
+  display: flex; align-items: center; gap: 7px; transition: transform 0.15s, background 0.15s;
+  animation: pulse-exit 2.5s ease-in-out infinite;
+}
+.quick-exit:hover { background: var(--red-dark); transform: scale(1.04); }
+@keyframes pulse-exit {
+  0%,100% { box-shadow: 0 4px 20px rgba(200,16,46,0.45); }
+  50% { box-shadow: 0 4px 30px rgba(200,16,46,0.7); }
+}
+
+nav {
+  background: var(--white); border-bottom: 2px solid var(--red); height: 60px;
+  display: flex; align-items: center; padding: 0 28px; gap: 16px;
+  position: sticky; top: 0; z-index: 500;
+}
+.nav-logo { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: var(--red); margin-right: auto; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+.nav-tab { font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; padding: 6px 14px; border-radius: 8px; transition: all 0.15s; border: none; background: none; font-family: 'DM Sans', sans-serif; }
+.nav-tab.active { background: var(--red); color: #fff; }
+.nav-tab:hover:not(.active) { background: var(--cream); color: var(--red); }
+
+.page { display: none; }
+.page.active { display: block; }
+
+/* HERO */
+.hero { background: var(--red); color: #fff; padding: 72px 32px 64px; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 30%, rgba(255,255,255,0.06) 0%, transparent 60%); }
+.hero-inner { position: relative; max-width: 700px; margin: 0 auto; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 5px 14px; font-size: 12px; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; margin-bottom: 24px; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(34px, 6vw, 58px); font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
+.hero h1 em { font-style: italic; opacity: 0.85; }
+.hero p { font-size: 17px; line-height: 1.65; opacity: 0.9; margin-bottom: 36px; font-weight: 300; }
+.hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn-primary { background: #fff; color: var(--red); border: none; border-radius: 12px; padding: 15px 30px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.15s; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+.btn-secondary { background: rgba(255,255,255,0.12); color: #fff; border: 1.5px solid rgba(255,255,255,0.4); border-radius: 12px; padding: 15px 30px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+.btn-secondary:hover { background: rgba(255,255,255,0.2); }
+.hero-anon-note { margin-top: 20px; font-size: 12px; opacity: 0.7; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+/* STATS BAR */
+.stats-bar { background: var(--white); display: flex; justify-content: center; flex-wrap: wrap; border-bottom: 1px solid var(--cream-dark); }
+.stat-item { text-align: center; padding: 22px 36px; border-right: 1px solid var(--cream-dark); flex: 1; min-width: 140px; }
+.stat-item:last-child { border-right: none; }
+.stat-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: var(--red); line-height: 1; }
+.stat-desc { font-size: 12px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+
+/* SECTIONS */
+.section { max-width: 1100px; margin: 0 auto; padding: 64px 28px; }
+.section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--red); margin-bottom: 10px; }
+.section-title { font-family: 'Playfair Display', serif; font-size: clamp(26px,4vw,38px); font-weight: 700; margin-bottom: 12px; line-height: 1.2; }
+.section-sub { font-size: 15px; color: var(--text-muted); max-width: 500px; line-height: 1.6; margin-bottom: 48px; font-weight: 400; }
+
+/* STEPS */
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+.step-card { background: var(--white); border-radius: 16px; padding: 26px 22px; box-shadow: var(--shadow); position: relative; overflow: hidden; transition: transform 0.2s; }
+.step-card:hover { transform: translateY(-3px); }
+.step-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--red); }
+.step-num { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 900; color: var(--cream-dark); line-height: 1; margin-bottom: 8px; }
+.step-icon { font-size: 22px; margin-bottom: 10px; }
+.step-title { font-size: 15px; font-weight: 700; margin-bottom: 7px; }
+.step-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+/* STAY TYPES */
+.stays-section { background: var(--white); padding: 64px 28px; }
+.stays-inner { max-width: 1100px; margin: 0 auto; }
+.stays-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.stay-card { border-radius: 16px; padding: 30px 24px; }
+.stay-card.emergency { background: var(--pink-light); border: 1.5px solid var(--pink); }
+.stay-card.shortterm { background: var(--cream); border: 1.5px solid var(--cream-dark); }
+.stay-card.longterm { background: var(--green-bg); border: 1.5px solid #A8D9BC; }
+.stay-icon { font-size: 26px; margin-bottom: 12px; }
+.stay-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 5px; }
+.stay-duration { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; color: var(--text-muted); }
+.stay-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+.stay-tag { display: inline-block; margin-top: 14px; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+.stay-card.emergency .stay-tag { background: var(--pink); color: var(--red-dark); }
+.stay-card.shortterm .stay-tag { background: var(--cream-dark); color: var(--text-muted); }
+.stay-card.longterm .stay-tag { background: #A8D9BC; color: var(--green); }
+
+/* ANONYMITY */
+.anon-section { background: var(--text); color: #fff; padding: 64px 28px; }
+.anon-inner { max-width: 1100px; margin: 0 auto; display: flex; gap: 60px; align-items: center; flex-wrap: wrap; }
+.anon-text { flex: 1; min-width: 280px; }
+.anon-features { flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 14px; }
+.anon-feature { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 15px 18px; display: flex; gap: 13px; align-items: flex-start; }
+.anon-icon { font-size: 20px; flex-shrink: 0; }
+.anon-feature-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.anon-feature-desc { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.5; }
+
+/* PHOTO GRID */
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap: 18px; }
+.photo-card { background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; }
+.photo-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.photo-card-img { width: 100%; height: 170px; object-fit: cover; overflow: hidden; background: var(--cream-dark); display: flex; align-items: center; justify-content: center; }
+.photo-card-img img { width: 100%; height: 100%; object-fit: cover; }
+.photo-card-body { padding: 14px 16px; }
+.photo-card-name { font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.verified-pill { background: var(--green-bg); color: var(--green); font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; text-transform: uppercase; }
+.photo-card-loc { font-size: 12px; color: var(--text-muted); margin: 4px 0 10px; }
+.photo-card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.ptag { font-size: 11px; background: var(--cream); color: var(--text-muted); padding: 3px 8px; border-radius: 6px; font-weight: 500; }
+.avail-pill { margin-top: 10px; display: inline-flex; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.3px; }
+.avail-pill.now { background: var(--green-bg); color: var(--green); }
+.avail-pill.soon { background: var(--amber-bg); color: var(--amber); }
+
+/* HOTLINE */
+.hotline-section { background: var(--red); color: #fff; padding: 64px 28px; text-align: center; }
+.hotline-inner { max-width: 700px; margin: 0 auto; }
+.hotline-num { font-family: 'Playfair Display', serif; font-size: clamp(38px,7vw,62px); font-weight: 900; letter-spacing: -1px; margin: 20px 0 10px; }
+.hotline-note { font-size: 13px; opacity: 0.75; margin-bottom: 28px; }
+.hotline-options { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.hotline-btn { background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.35); color: #fff; padding: 11px 22px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: background 0.15s; }
+.hotline-btn:hover { background: rgba(255,255,255,0.25); }
+
+/* PARTNERS */
+.partners-bar { background: var(--white); border-top: 1px solid var(--cream-dark); border-bottom: 1px solid var(--cream-dark); padding: 22px 28px; display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; }
+.partner-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
+.partner-logo { font-size: 12px; font-weight: 700; color: var(--text-muted); opacity: 0.6; letter-spacing: 0.4px; }
+
+/* ── DB PAGE ── */
+.db-hero { background: var(--text); color: #fff; padding: 26px 30px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.db-hero-title { font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 900; }
+.db-hero-sub { font-size: 12px; opacity: 0.55; margin-top: 3px; }
+.db-stats { display: flex; gap: 26px; flex-wrap: wrap; }
+.db-stat { text-align: center; }
+.db-stat-n { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; color: var(--pink); line-height: 1; }
+.db-stat-l { font-size: 10px; opacity: 0.55; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+.db-access-badge { background: rgba(200,16,46,0.2); border: 1px solid rgba(200,16,46,0.4); color: #ff8fa0; font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 20px; }
+
+.db-container { max-width: 1200px; margin: 0 auto; padding: 26px 22px; }
+
+.filters-bar { background: var(--white); border-radius: 12px; padding: 13px 16px; margin-bottom: 18px; display: flex; align-items: center; gap: 13px; flex-wrap: wrap; box-shadow: var(--shadow); }
+.filter-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+.filter-chips { display: flex; gap: 7px; flex-wrap: wrap; flex: 1; }
+.chip { padding: 5px 13px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1.5px solid var(--cream-dark); background: var(--cream); color: var(--text-muted); transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+.chip.active, .chip:hover { background: var(--red); border-color: var(--red); color: #fff; }
+.search-input { background: var(--cream); border: 1.5px solid var(--cream-dark); border-radius: 8px; padding: 7px 13px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); width: 190px; outline: none; }
+
+.legend { background: var(--white); border-radius: 12px; padding: 13px 18px; margin-bottom: 18px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.legend-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
+.legend-items { display: flex; gap: 16px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; }
+.ldot { width: 9px; height: 9px; border-radius: 50%; }
+.ldot.g { background: var(--green); } .ldot.a { background: var(--amber); } .ldot.r { background: var(--red); }
+
+.db-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px,1fr)); gap: 18px; margin-bottom: 40px; }
+.db-card { background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; animation: fadeUp 0.4s ease both; }
+.db-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+@keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+
+.db-card-header { display: flex; gap: 13px; align-items: flex-start; padding: 16px 16px 0; }
+.host-img { width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; font-family: 'Playfair Display', serif; font-weight: 700; overflow: hidden; }
+.host-img img { width: 100%; height: 100%; object-fit: cover; }
+.db-card-info { flex: 1; min-width: 0; }
+.db-card-name { font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.db-verified { background: var(--green-bg); color: var(--green); font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; text-transform: uppercase; }
+.db-card-loc { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.db-avail-tag { font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.3px; }
+.db-avail-tag.now { background: var(--green-bg); color: var(--green); }
+.db-avail-tag.soon { background: var(--amber-bg); color: var(--amber); }
+.db-avail-tag.full { background: var(--pink-light); color: var(--red); }
+
+.db-card-body { padding: 12px 16px; border-top: 1px solid var(--cream); margin-top: 13px; }
+.db-details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 11px; }
+.db-detail { display: flex; flex-direction: column; gap: 2px; }
+.db-detail-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-muted); }
+.db-detail-value { font-size: 13px; font-weight: 500; }
+.db-tags { display: flex; flex-wrap: wrap; gap: 5px; padding-top: 10px; }
+.db-tag { font-size: 11px; background: var(--cream); color: var(--text-muted); padding: 3px 8px; border-radius: 6px; font-weight: 500; }
+.db-card-footer { background: var(--cream); padding: 9px 16px; display: flex; align-items: center; justify-content: space-between; }
+.db-id { font-size: 10px; color: var(--text-muted); font-weight: 500; }
+.match-dots { display: flex; gap: 3px; }
+.mdot { width: 6px; height: 6px; border-radius: 50%; background: var(--cream-dark); }
+.mdot.on { background: var(--red); }
+.db-sh { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 13px; }
+.db-sh-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; }
+.db-count { font-size: 12px; color: var(--text-muted); }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 900; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: #fff; border-radius: 20px; max-width: 540px; width: 100%; overflow: hidden; box-shadow: var(--shadow-lg); animation: modalIn 0.22s ease; }
+@keyframes modalIn { from { opacity:0; transform:scale(0.95) translateY(8px); } to { opacity:1; transform:scale(1) translateY(0); } }
+.modal-top { background: var(--red); padding: 22px 22px 18px; color: #fff; display: flex; align-items: flex-start; gap: 13px; }
+.modal-av { width: 58px; height: 58px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; font-size: 20px; font-family: 'Playfair Display', serif; font-weight: 700; flex-shrink: 0; overflow: hidden; }
+.modal-av img { width: 100%; height: 100%; object-fit: cover; }
+.modal-name { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 900; }
+.modal-sub { font-size: 11px; opacity: 0.75; margin-top: 3px; }
+.modal-close { margin-left: auto; background: rgba(255,255,255,0.2); border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.modal-body { padding: 20px 22px; }
+.modal-row { display: flex; gap: 12px; margin-bottom: 12px; }
+.modal-field { flex: 1; background: var(--cream); border-radius: 10px; padding: 10px 12px; }
+.mf-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 3px; }
+.mf-val { font-size: 13px; font-weight: 600; color: var(--text); }
+.modal-notes { background: var(--pink-light); border: 1px solid var(--pink); border-radius: 10px; padding: 11px 13px; margin-bottom: 16px; font-size: 13px; line-height: 1.55; }
+.modal-notes strong { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--red); margin-bottom: 4px; }
+.modal-btn { width: 100%; background: var(--red); color: #fff; border: none; border-radius: 10px; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+.modal-btn:hover { background: var(--red-dark); }
+
+footer { background: var(--text); color: rgba(255,255,255,0.45); text-align: center; padding: 18px; font-size: 11px; }
+footer strong { color: rgba(255,255,255,0.8); }
+
+@media (max-width: 700px) {
+  .stays-grid { grid-template-columns: 1fr; }
+  .anon-inner { flex-direction: column; }
+  .modal-row { flex-direction: column; }
+  .hero { padding: 48px 20px 44px; }
+  .db-grid { grid-template-columns: 1fr; }
+  .stat-item { padding: 16px 20px; }
+}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">HOPELY <span class="logo-heart">♡</span></div>
-  <div class="header-right">
-    <span class="header-stat"><strong>12</strong> available now</span>
-    <span class="header-stat"><strong>29</strong> total hosts</span>
-    <span class="header-badge">🔒 Caseworker Access Only</span>
+<button class="quick-exit" onclick="quickExit()">✕ Quick Exit</button>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('public')">HOPELY <span style="font-size:16px">♡</span></div>
+  <button class="nav-tab active" id="tab-public" onclick="showPage('public')">For Victims &amp; Families</button>
+  <button class="nav-tab" id="tab-db" onclick="showPage('db')">🔒 Caseworker Portal</button>
+</nav>
+
+<!-- PUBLIC PAGE -->
+<div class="page active" id="page-public">
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">🏠 Free Emergency Housing Support</div>
+      <h1>A safe room, <em>tonight</em>.<br>No waiting list.</h1>
+      <p>Hopely connects domestic violence survivors and families in crisis with vetted volunteer hosts — giving you a safe, private place to stay while you find your footing.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.querySelector('.hotline-section').scrollIntoView({behavior:'smooth'})">📞 Get Help Now</button>
+        <button class="btn-secondary" onclick="document.querySelector('.steps-section').scrollIntoView({behavior:'smooth'})">How It Works</button>
+      </div>
+      <div class="hero-anon-note">🔒 100% anonymous — we never share your name or location with anyone</div>
+    </div>
   </div>
-</header>
 
-<div class="container">
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-num">35,000</div><div class="stat-desc">Homeless from DV in one month</div></div>
+    <div class="stat-item"><div class="stat-num">50%</div><div class="stat-desc">Of women & children turned away from shelters</div></div>
+    <div class="stat-item"><div class="stat-num">13M</div><div class="stat-desc">Empty rooms across Australia</div></div>
+    <div class="stat-item"><div class="stat-num">5–10yr</div><div class="stat-desc">Wait for social housing</div></div>
+    <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-desc">Hopely hotline available</div></div>
+  </div>
 
-  <div class="hero-strip">
+  <div class="section steps-section">
+    <div class="section-label">How It Works</div>
+    <div class="section-title">Safe housing in hours,<br>not years.</div>
+    <div class="section-sub">Our process is fast, discreet, and designed to protect you at every step.</div>
+    <div class="steps-grid">
+      <div class="step-card"><div class="step-icon">📞</div><div class="step-num">01</div><div class="step-title">Call or text our hotline</div><div class="step-desc">Reach us any time. You can text if you can't speak. Our team speaks multiple languages and will never share your identity.</div></div>
+      <div class="step-card"><div class="step-icon">🔍</div><div class="step-num">02</div><div class="step-title">Caseworker assessment</div><div class="step-desc">A trained caseworker understands your needs — children, pets, location, language — and finds the right match.</div></div>
+      <div class="step-card"><div class="step-icon">🏡</div><div class="step-num">03</div><div class="step-title">Matched to a verified host</div><div class="step-desc">All hosts are police-checked, home-verified, and DV-awareness trained. You only see a first name and suburb.</div></div>
+      <div class="step-card"><div class="step-icon">🚗</div><div class="step-num">04</div><div class="step-title">Transport arranged</div><div class="step-desc">We coordinate safe transport to your host. You can be in a safe home within hours of calling.</div></div>
+      <div class="step-card"><div class="step-icon">📈</div><div class="step-num">05</div><div class="step-title">Stability &amp; next steps</div><div class="step-desc">While you stay, we connect you to upskilling, legal advice, and long-term housing options through our partners.</div></div>
+    </div>
+  </div>
+
+  <div class="stays-section">
+    <div class="stays-inner">
+      <div class="section-label">Stay Options</div>
+      <div class="section-title" style="margin-bottom:32px;">We meet you where you are.</div>
+      <div class="stays-grid">
+        <div class="stay-card emergency"><div class="stay-icon">🚨</div><div class="stay-title">Emergency Stay</div><div class="stay-duration">3 – 7 Days</div><div class="stay-desc">For people who need a safe room tonight. No paperwork, no waiting. Just safety, immediately.</div><div class="stay-tag">Immediate Placement</div></div>
+        <div class="stay-card shortterm"><div class="stay-icon">🏠</div><div class="stay-title">Short-Term Stay</div><div class="stay-duration">2 – 4 Weeks</div><div class="stay-desc">Breathing room to plan your next step. Caseworker support continues throughout your stay.</div><div class="stay-tag">Supported Transition</div></div>
+        <div class="stay-card longterm"><div class="stay-icon">🌱</div><div class="stay-title">Long-Term Co-Stay</div><div class="stay-duration">3 – 6 Months</div><div class="stay-desc">A stable co-inhabiting arrangement while you rebuild. Connected to Global Sisters and housing partners.</div><div class="stay-tag">Path to Independence</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="anon-section">
+    <div class="anon-inner">
+      <div class="anon-text">
+        <div class="section-label" style="color:var(--pink)">Your Safety Comes First</div>
+        <div class="section-title" style="color:#fff;margin-bottom:12px;">Designed to keep<br>you invisible.</div>
+        <div class="section-sub" style="color:rgba(255,255,255,0.6)">We built Hopely knowing that your location and identity could put you at risk. Every part of the system protects you.</div>
+      </div>
+      <div class="anon-features">
+        <div class="anon-feature"><div class="anon-icon">🕵️</div><div><div class="anon-feature-title">No real names in the system</div><div class="anon-feature-desc">You're identified only by a case code. Hosts never see your surname, photo, or contact details.</div></div></div>
+        <div class="anon-feature"><div class="anon-icon">📵</div><div><div class="anon-feature-title">Silent contact options</div><div class="anon-feature-desc">Can't speak aloud? Text us or use our discreet online form. We'll never call back without permission.</div></div></div>
+        <div class="anon-feature"><div class="anon-icon">🔒</div><div><div class="anon-feature-title">Location protected until placement</div><div class="anon-feature-desc">Host suburb is revealed only after you agree. Your current address is never recorded.</div></div></div>
+        <div class="anon-feature"><div class="anon-icon">⚡</div><div><div class="anon-feature-title">Quick Exit on every page</div><div class="anon-feature-desc">Hit the red "Quick Exit" button anytime — it instantly takes you to Google and clears this visit from your browser history.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--cream);">
+    <div class="section" style="padding-bottom:20px;">
+      <div class="section-label">Our Hosts</div>
+      <div class="section-title">Real people. Vetted. Ready.</div>
+      <div class="section-sub">Every host is police-checked, home-verified, and DV-awareness trained. Below is a sample from our active host network.</div>
+    </div>
+    <div style="max-width:1100px;margin:0 auto;padding:0 28px 64px;">
+      <div class="photo-grid" id="public-host-grid"></div>
+    </div>
+  </div>
+
+  <div class="partners-bar">
+    <span class="partner-label">Supported by</span>
+    <span class="partner-logo">🏛 NSW GOVERNMENT</span>
+    <span class="partner-logo">🌐 GLOBAL SISTERS</span>
+    <span class="partner-logo">📋 KPMG</span>
+    <span class="partner-logo">🤝 LINK2HOME</span>
+    <span class="partner-logo">💙 1800RESPECT</span>
+    <span class="partner-logo">🏥 HEADSPACE</span>
+    <span class="partner-logo">🔍 ASKIZZY</span>
+  </div>
+
+  <div class="hotline-section">
+    <div class="hotline-inner">
+      <div class="section-label" style="color:var(--pink)">Free. Confidential. 24/7.</div>
+      <div class="hotline-num">1800 HOPELY</div>
+      <div class="hotline-note">Or text "SAFE" to 0400 000 000 &nbsp;·&nbsp; English, Arabic, Hindi, Tamil, Mandarin &amp; more</div>
+      <div class="hotline-options">
+        <button class="hotline-btn">📞 Call Now</button>
+        <button class="hotline-btn">💬 Text Instead</button>
+        <button class="hotline-btn">🌐 AskIzzy Resources</button>
+        <button class="hotline-btn">🆘 1800RESPECT</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end public -->
+
+<!-- DB PAGE -->
+<div class="page" id="page-db">
+  <div class="db-hero">
     <div>
-      <h1>Verified Host Database</h1>
-      <p>Safe, vetted hosts with spare rooms ready to provide transitional shelter for DV survivors across Greater Sydney.</p>
+      <div class="db-hero-title">Hopely Host Database</div>
+      <div class="db-hero-sub">Internal caseworker tool — matching verified hosts to verified cases</div>
     </div>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-num">29</div>
-        <div class="hero-stat-label">Hosts Verified</div>
+    <div class="db-stats">
+      <div class="db-stat"><div class="db-stat-n">29</div><div class="db-stat-l">Total Hosts</div></div>
+      <div class="db-stat"><div class="db-stat-n">41</div><div class="db-stat-l">Rooms Available</div></div>
+      <div class="db-stat"><div class="db-stat-n">12</div><div class="db-stat-l">Available Now</div></div>
+      <div class="db-stat"><div class="db-stat-n">3</div><div class="db-stat-l">Active Placements</div></div>
+    </div>
+    <span class="db-access-badge">🔐 Caseworker Access Only</span>
+  </div>
+  <div class="db-container">
+    <div class="filters-bar">
+      <span class="filter-label">Filter:</span>
+      <div class="filter-chips">
+        <span class="chip active" onclick="filterDB('all',this)">All Hosts</span>
+        <span class="chip" onclick="filterDB('available',this)">Available Now</span>
+        <span class="chip" onclick="filterDB('children',this)">Children Welcome</span>
+        <span class="chip" onclick="filterDB('pet',this)">Pets OK</span>
+        <span class="chip" onclick="filterDB('emergency',this)">Emergency</span>
+        <span class="chip" onclick="filterDB('longterm',this)">Long-Term</span>
       </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">41</div>
-        <div class="hero-stat-label">Rooms Available</div>
+      <input class="search-input" placeholder="🔍  Search suburb or name..." oninput="searchDB(this.value)">
+    </div>
+    <div class="legend">
+      <span class="legend-title">Key:</span>
+      <div class="legend-items">
+        <div class="legend-item"><div class="ldot g"></div> Available Now</div>
+        <div class="legend-item"><div class="ldot a"></div> Available Soon</div>
+        <div class="legend-item"><div class="ldot r"></div> Currently Full</div>
       </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">3–7</div>
-        <div class="hero-stat-label">Day Stays</div>
-      </div>
+      <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">All hosts police-checked &amp; DV-awareness trained ✓</span>
     </div>
-  </div>
-
-  <div class="filters-bar">
-    <span class="filter-label">Filter:</span>
-    <div class="filter-chips">
-      <span class="chip active" onclick="filterCards('all', this)">All Hosts</span>
-      <span class="chip" onclick="filterCards('available', this)">Available Now</span>
-      <span class="chip" onclick="filterCards('children', this)">Children Welcome</span>
-      <span class="chip" onclick="filterCards('pet', this)">Pets OK</span>
-      <span class="chip" onclick="filterCards('emergency', this)">Emergency Stay</span>
-      <span class="chip" onclick="filterCards('longterm', this)">Long-Term</span>
+    <div class="db-sh">
+      <span class="db-sh-title">Host Listings</span>
+      <span class="db-count" id="db-count">Showing 8 of 29 hosts</span>
     </div>
-    <input class="search-box" placeholder="🔍  Search suburb..." oninput="searchCards(this.value)">
+    <div class="db-grid" id="db-host-grid"></div>
   </div>
-
-  <div class="legend">
-    <span class="legend-title">Availability Key:</span>
-    <div class="legend-items">
-      <div class="legend-item"><div class="legend-dot green"></div> Available Now</div>
-      <div class="legend-item"><div class="legend-dot amber"></div> Available in 2–3 Days</div>
-      <div class="legend-item"><div class="legend-dot red-dot"></div> Currently Full</div>
-    </div>
-    <span style="margin-left:auto; font-size:11px; color:var(--text-muted);">All hosts are police-checked &amp; home-verified ✓</span>
-  </div>
-
-  <div class="section-header">
-    <span class="section-title">Host Listings</span>
-    <span class="section-count" id="count-label">Showing 8 of 29 hosts</span>
-  </div>
-
-  <div class="grid" id="host-grid">
-    <!-- Cards injected by JS -->
-  </div>
-
 </div>
 
-<footer>
-  <strong>HOPELY</strong> — Rebuilding Lives, One Space at a Time &nbsp;|&nbsp; Internal caseworker tool — not for public distribution &nbsp;|&nbsp; Pilot Program 2025
-</footer>
-
-<!-- MODAL -->
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
-  <div class="modal" id="modal-content">
+  <div class="modal">
     <div class="modal-top">
-      <div class="modal-avatar" id="m-avatar"></div>
-      <div>
-        <div class="modal-name" id="m-name"></div>
-        <div class="modal-sub" id="m-sub"></div>
-      </div>
+      <div class="modal-av" id="m-av"></div>
+      <div><div class="modal-name" id="m-name"></div><div class="modal-sub" id="m-sub"></div></div>
       <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">✕</button>
     </div>
     <div class="modal-body">
       <div class="modal-row">
-        <div class="modal-field">
-          <div class="modal-field-label">Suburb</div>
-          <div class="modal-field-value" id="m-suburb"></div>
-        </div>
-        <div class="modal-field">
-          <div class="modal-field-label">Availability</div>
-          <div class="modal-field-value" id="m-avail"></div>
-        </div>
+        <div class="modal-field"><div class="mf-label">Suburb</div><div class="mf-val" id="m-suburb"></div></div>
+        <div class="modal-field"><div class="mf-label">Availability</div><div class="mf-val" id="m-avail"></div></div>
       </div>
       <div class="modal-row">
-        <div class="modal-field">
-          <div class="modal-field-label">Spare Rooms</div>
-          <div class="modal-field-value" id="m-rooms"></div>
-        </div>
-        <div class="modal-field">
-          <div class="modal-field-label">Stay Type</div>
-          <div class="modal-field-value" id="m-stay"></div>
-        </div>
+        <div class="modal-field"><div class="mf-label">Spare Rooms</div><div class="mf-val" id="m-rooms"></div></div>
+        <div class="modal-field"><div class="mf-label">Stay Type</div><div class="mf-val" id="m-stay"></div></div>
       </div>
       <div class="modal-row">
-        <div class="modal-field">
-          <div class="modal-field-label">Police Check</div>
-          <div class="modal-field-value" id="m-police"></div>
-        </div>
-        <div class="modal-field">
-          <div class="modal-field-label">Host Since</div>
-          <div class="modal-field-value" id="m-since"></div>
-        </div>
+        <div class="modal-field"><div class="mf-label">Police Check</div><div class="mf-val" id="m-police" style="color:var(--green)"></div></div>
+        <div class="modal-field"><div class="mf-label">Host Since</div><div class="mf-val" id="m-since"></div></div>
       </div>
-      <div class="modal-notes">
-        <strong>Host Notes</strong>
-        <span id="m-notes"></span>
-      </div>
-      <button class="modal-btn" onclick="alert('Request sent to caseworker coordinator. ✓')">Request Match for This Host</button>
+      <div class="modal-notes"><strong>Host Notes</strong><span id="m-notes"></span></div>
+      <button class="modal-btn" onclick="alert('Match request sent to coordinator. Host will be contacted within 2 hours. ✓')">Request Match for This Host</button>
     </div>
   </div>
 </div>
 
+<footer>
+  <strong>HOPELY</strong> — Rebuilding Lives, One Space at a Time &nbsp;|&nbsp; Pilot Program 2025, Greater Sydney
+</footer>
+
 <script>
+function quickExit() {
+  try { window.history.replaceState(null,'','https://www.google.com'); } catch(e){}
+  window.location.replace("https://www.google.com/search?q=weather+today");
+}
+
+const COLORS = ["#F4C2C2","#C8E6C9","#B3D4F5","#F9E4B7","#D7C4F0","#FFD4D4","#B2EBF2","#FFCCBC"];
 const hosts = [
-  {
-    id: "HPL-001",
-    name: "Margaret T.",
-    initials: "MT",
-    color: "#F4C2C2",
-    suburb: "Parramatta, NSW",
-    availability: "now",
-    availLabel: "Available Now",
-    rooms: "2 spare rooms",
-    stayType: "Emergency + Short-Term",
-    policeCheck: "✓ Cleared Feb 2025",
-    since: "Jan 2025",
-    tags: ["Children OK", "Female Host", "Private Entrance"],
-    notes: "Retired nurse. Comfortable with trauma backgrounds. Has a calm household, no other occupants. Can provide meals. Transport to Westmead available.",
-    matchScore: 5,
-    filters: ["available", "children", "emergency"],
-    gender: "F"
-  },
-  {
-    id: "HPL-002",
-    name: "David & Sue K.",
-    initials: "DK",
-    color: "#C8E6C9",
-    suburb: "Penrith, NSW",
-    availability: "now",
-    availLabel: "Available Now",
-    rooms: "1 spare room",
-    stayType: "Short-Term (2–4 wks)",
-    policeCheck: "✓ Cleared Mar 2025",
-    since: "Feb 2025",
-    tags: ["Couple Hosts", "Children OK", "Pets OK"],
-    notes: "Empty nesters with a large quiet home. Happy to accommodate mothers with young children. Dog on premises (friendly).",
-    matchScore: 4,
-    filters: ["available", "children", "pet"],
-    gender: "M"
-  },
-  {
-    id: "HPL-003",
-    name: "Anika S.",
-    initials: "AS",
-    color: "#B3D4F5",
-    suburb: "Liverpool, NSW",
-    availability: "soon",
-    availLabel: "Available in 2 days",
-    rooms: "1 spare room",
-    stayType: "Emergency Only",
-    policeCheck: "✓ Cleared Jan 2025",
-    since: "Jan 2025",
-    tags: ["Female Host", "Speaks Hindi", "Close to Hospital"],
-    notes: "Uni student with a spare private room. Can only host for up to 7 days. Located near Liverpool Hospital and transport hub.",
-    matchScore: 3,
-    filters: ["emergency"],
-    gender: "F"
-  },
-  {
-    id: "HPL-004",
-    name: "Roberta M.",
-    initials: "RM",
-    color: "#F9E4B7",
-    suburb: "Blacktown, NSW",
-    availability: "now",
-    availLabel: "Available Now",
-    rooms: "2 spare rooms",
-    stayType: "Long-Term (3–6 mo)",
-    policeCheck: "✓ Cleared Dec 2024",
-    since: "Nov 2024",
-    tags: ["DV Awareness Trained", "Children OK", "Quiet Area"],
-    notes: "Social worker by profession. Has hosted 3 previous Hopely guests successfully. Comfortable with complex needs. References available.",
-    matchScore: 5,
-    filters: ["available", "children", "longterm"],
-    gender: "F"
-  },
-  {
-    id: "HPL-005",
-    name: "James L.",
-    initials: "JL",
-    color: "#D7C4F0",
-    suburb: "Campbelltown, NSW",
-    availability: "full",
-    availLabel: "Currently Full",
-    rooms: "0 (waitlist open)",
-    stayType: "Short to Long-Term",
-    policeCheck: "✓ Cleared Mar 2025",
-    since: "Mar 2025",
-    tags: ["On Waitlist", "Male Host", "Car Available"],
-    notes: "Currently hosting one guest. Expecting availability by end of month. Can be added to waitlist. Has private bathroom for guests.",
-    matchScore: 2,
-    filters: [],
-    gender: "M"
-  },
-  {
-    id: "HPL-006",
-    name: "Gloria & Paul N.",
-    initials: "GN",
-    color: "#FFD4D4",
-    suburb: "Campbelltown, NSW",
-    availability: "now",
-    availLabel: "Available Now",
-    rooms: "3 spare rooms",
-    stayType: "Emergency + Short-Term",
-    policeCheck: "✓ Cleared Feb 2025",
-    since: "Feb 2025",
-    tags: ["Children OK", "Pets OK", "Large Home"],
-    notes: "Large 5-bedroom family home. Church community volunteers. Have hosted foster families previously. Very welcoming environment.",
-    matchScore: 5,
-    filters: ["available", "children", "pet", "emergency"],
-    gender: "F"
-  },
-  {
-    id: "HPL-007",
-    name: "Priya R.",
-    initials: "PR",
-    color: "#C8E6C9",
-    suburb: "Auburn, NSW",
-    availability: "now",
-    availLabel: "Available Now",
-    rooms: "1 spare room",
-    stayType: "Emergency (3–7 days)",
-    policeCheck: "✓ Cleared Apr 2025",
-    since: "Apr 2025",
-    tags: ["Female Host", "Speaks Tamil", "Near School"],
-    notes: "New Hopely host. Has completed DV awareness module. Comfortable with single mothers. Close to Auburn Public School and train station.",
-    matchScore: 3,
-    filters: ["available", "emergency", "children"],
-    gender: "F"
-  },
-  {
-    id: "HPL-008",
-    name: "Colin B.",
-    initials: "CB",
-    color: "#B3D4F5",
-    suburb: "Fairfield, NSW",
-    availability: "soon",
-    availLabel: "Available in 3 days",
-    rooms: "2 spare rooms",
-    stayType: "Short to Long-Term",
-    policeCheck: "✓ Cleared Mar 2025",
-    since: "Mar 2025",
-    tags: ["Pets OK", "Male Host", "Garden Area"],
-    notes: "Retired teacher. Has a granny flat at rear of property. Separate entrance and bathroom. No children in home. Pet-friendly (small dog on site).",
-    matchScore: 4,
-    filters: ["pet", "longterm"],
-    gender: "M"
-  }
+  {id:"HPL-001",name:"Margaret T.",initials:"MT",photo:"https://randomuser.me/api/portraits/women/44.jpg",suburb:"Parramatta, NSW",availability:"now",availLabel:"Available Now",rooms:"2 spare rooms",stayType:"Emergency + Short-Term",policeCheck:"✓ Cleared Feb 2025",since:"Jan 2025",tags:["Children OK","Female Host","Private Entrance"],notes:"Retired nurse. Comfortable with trauma backgrounds. Calm household, no other occupants. Can provide meals. Transport to Westmead available.",matchScore:5,filters:["available","children","emergency"]},
+  {id:"HPL-002",name:"David & Sue K.",initials:"DK",photo:"https://randomuser.me/api/portraits/women/68.jpg",suburb:"Penrith, NSW",availability:"now",availLabel:"Available Now",rooms:"1 spare room",stayType:"Short-Term (2–4 wks)",policeCheck:"✓ Cleared Mar 2025",since:"Feb 2025",tags:["Couple Hosts","Children OK","Pets OK"],notes:"Empty nesters with a large quiet home. Happy to accommodate mothers with young children. Dog on premises (friendly).",matchScore:4,filters:["available","children","pet"]},
+  {id:"HPL-003",name:"Anika S.",initials:"AS",photo:"https://randomuser.me/api/portraits/women/33.jpg",suburb:"Liverpool, NSW",availability:"soon",availLabel:"Available in 2 days",rooms:"1 spare room",stayType:"Emergency Only",policeCheck:"✓ Cleared Jan 2025",since:"Jan 2025",tags:["Female Host","Speaks Hindi","Near Hospital"],notes:"Uni student with a spare private room. Can only host up to 7 days. Located near Liverpool Hospital and transport hub.",matchScore:3,filters:["emergency"]},
+  {id:"HPL-004",name:"Roberta M.",initials:"RM",photo:"https://randomuser.me/api/portraits/women/55.jpg",suburb:"Blacktown, NSW",availability:"now",availLabel:"Available Now",rooms:"2 spare rooms",stayType:"Long-Term (3–6 mo)",policeCheck:"✓ Cleared Dec 2024",since:"Nov 2024",tags:["DV Trained","Children OK","Quiet Area"],notes:"Social worker by profession. Has hosted 3 previous Hopely guests successfully. Comfortable with complex needs. References available.",matchScore:5,filters:["available","children","longterm"]},
+  {id:"HPL-005",name:"James L.",initials:"JL",photo:"https://randomuser.me/api/portraits/men/52.jpg",suburb:"Campbelltown, NSW",availability:"full",availLabel:"Currently Full",rooms:"0 (waitlist open)",stayType:"Short to Long-Term",policeCheck:"✓ Cleared Mar 2025",since:"Mar 2025",tags:["On Waitlist","Male Host","Car Available"],notes:"Currently hosting one guest. Expecting availability end of month. Can be added to waitlist. Has private bathroom for guests.",matchScore:2,filters:[]},
+  {id:"HPL-006",name:"Gloria & Paul N.",initials:"GN",photo:"https://randomuser.me/api/portraits/women/72.jpg",suburb:"Campbelltown, NSW",availability:"now",availLabel:"Available Now",rooms:"3 spare rooms",stayType:"Emergency + Short-Term",policeCheck:"✓ Cleared Feb 2025",since:"Feb 2025",tags:["Children OK","Pets OK","Large Home"],notes:"Large 5-bedroom family home. Church community volunteers. Have hosted foster families previously. Very welcoming environment.",matchScore:5,filters:["available","children","pet","emergency"]},
+  {id:"HPL-007",name:"Priya R.",initials:"PR",photo:"https://randomuser.me/api/portraits/women/26.jpg",suburb:"Auburn, NSW",availability:"now",availLabel:"Available Now",rooms:"1 spare room",stayType:"Emergency (3–7 days)",policeCheck:"✓ Cleared Apr 2025",since:"Apr 2025",tags:["Female Host","Speaks Tamil","Near School"],notes:"New Hopely host. Has completed DV awareness module. Comfortable with single mothers. Close to Auburn Public School and train station.",matchScore:3,filters:["available","emergency","children"]},
+  {id:"HPL-008",name:"Colin B.",initials:"CB",photo:"https://randomuser.me/api/portraits/men/36.jpg",suburb:"Fairfield, NSW",availability:"soon",availLabel:"Available in 3 days",rooms:"2 spare rooms",stayType:"Short to Long-Term",policeCheck:"✓ Cleared Mar 2025",since:"Mar 2025",tags:["Pets OK","Male Host","Garden Area"],notes:"Retired teacher. Granny flat at rear with separate entrance and bathroom. Pet-friendly (small dog on site).",matchScore:4,filters:["pet","longterm"]},
 ];
 
-let activeFilter = 'all';
-let searchTerm = '';
-
-function renderCards() {
-  const grid = document.getElementById('host-grid');
-  grid.innerHTML = '';
-
-  const filtered = hosts.filter(h => {
-    const matchFilter = activeFilter === 'all' || h.filters.includes(activeFilter);
-    const matchSearch = h.suburb.toLowerCase().includes(searchTerm.toLowerCase()) || h.name.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchFilter && matchSearch;
+function renderPublicHosts() {
+  const grid = document.getElementById('public-host-grid');
+  hosts.filter(h => h.availability !== 'full').slice(0,6).forEach((h,i) => {
+    const av = h.availability === 'now' ? 'now' : 'soon';
+    const avText = h.availability === 'now' ? '🟢 Available Now' : '🟡 Available Soon';
+    const div = document.createElement('div');
+    div.className = 'photo-card';
+    div.innerHTML = `
+      <div class="photo-card-img" style="background:${COLORS[i%COLORS.length]}">
+        <img src="${h.photo}" alt="" onerror="this.style.display='none'">
+      </div>
+      <div class="photo-card-body">
+        <div class="photo-card-name">${h.name} <span class="verified-pill">✓ Verified</span></div>
+        <div class="photo-card-loc">📍 ${h.suburb}</div>
+        <div class="photo-card-tags">${h.tags.map(t=>`<span class="ptag">${t}</span>`).join('')}</div>
+        <div class="avail-pill ${av}">${avText}</div>
+      </div>`;
+    grid.appendChild(div);
   });
+}
 
-  document.getElementById('count-label').textContent = `Showing ${filtered.length} of ${hosts.length} hosts`;
-
-  filtered.forEach((h, i) => {
-    const availClass = h.availability === 'now' ? 'avail-now' : h.availability === 'soon' ? 'avail-soon' : 'avail-full';
-    const dots = Array.from({length: 5}, (_, i) => `<div class="dot ${i < h.matchScore ? 'filled' : ''}"></div>`).join('');
-
+let dbFilter='all', dbSearch='';
+function renderDB() {
+  const grid = document.getElementById('db-host-grid');
+  grid.innerHTML = '';
+  const filtered = hosts.filter(h => {
+    const fOk = dbFilter==='all' || h.filters.includes(dbFilter);
+    const sOk = h.suburb.toLowerCase().includes(dbSearch.toLowerCase()) || h.name.toLowerCase().includes(dbSearch.toLowerCase());
+    return fOk && sOk;
+  });
+  document.getElementById('db-count').textContent = `Showing ${filtered.length} of ${hosts.length} hosts`;
+  filtered.forEach((h,i) => {
+    const aClass = h.availability==='now'?'now':h.availability==='soon'?'soon':'full';
+    const dots = Array.from({length:5},(_,j)=>`<div class="mdot ${j<h.matchScore?'on':''}"></div>`).join('');
     const card = document.createElement('div');
-    card.className = 'card';
-    card.style.animationDelay = (i * 0.07) + 's';
+    card.className = 'db-card';
+    card.style.animationDelay = (i*0.06)+'s';
     card.innerHTML = `
-      <div class="card-header">
-        <div class="avatar" style="background:${h.color}; color:#333;">${h.initials}</div>
-        <div class="card-info">
-          <div class="card-name">
-            ${h.name}
-            <span class="verified-badge">✓ Verified</span>
-          </div>
-          <div class="card-location">${h.suburb}</div>
+      <div class="db-card-header">
+        <div class="host-img" style="background:${COLORS[i%COLORS.length]}">
+          <img src="${h.photo}" alt="" onerror="this.style.display='none'">
         </div>
-        <span class="availability-tag ${availClass}">${h.availLabel}</span>
+        <div class="db-card-info">
+          <div class="db-card-name">${h.name} <span class="db-verified">✓ Verified</span></div>
+          <div class="db-card-loc">📍 ${h.suburb}</div>
+        </div>
+        <span class="db-avail-tag ${aClass}">${h.availLabel}</span>
       </div>
-      <div class="card-body">
-        <div class="card-details">
-          <div class="detail-item">
-            <span class="detail-label">Spare Rooms</span>
-            <span class="detail-value">${h.rooms}</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Stay Type</span>
-            <span class="detail-value">${h.stayType}</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Police Check</span>
-            <span class="detail-value" style="color:var(--green);">${h.policeCheck}</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Hosting Since</span>
-            <span class="detail-value">${h.since}</span>
-          </div>
+      <div class="db-card-body">
+        <div class="db-details">
+          <div class="db-detail"><span class="db-detail-label">Spare Rooms</span><span class="db-detail-value">${h.rooms}</span></div>
+          <div class="db-detail"><span class="db-detail-label">Stay Type</span><span class="db-detail-value">${h.stayType}</span></div>
+          <div class="db-detail"><span class="db-detail-label">Police Check</span><span class="db-detail-value" style="color:var(--green)">${h.policeCheck}</span></div>
+          <div class="db-detail"><span class="db-detail-label">Host Since</span><span class="db-detail-value">${h.since}</span></div>
         </div>
-        <div class="card-tags">
-          ${h.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-        </div>
+        <div class="db-tags">${h.tags.map(t=>`<span class="db-tag">${t}</span>`).join('')}</div>
       </div>
-      <div class="card-footer">
-        <span class="card-id">${h.id}</span>
-        <div class="match-score">
-          Match
-          <div class="match-dots">${dots}</div>
-        </div>
-      </div>
-    `;
-    card.onclick = () => openModal(h);
+      <div class="db-card-footer">
+        <span class="db-id">${h.id}</span>
+        <div style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--red)">Match <div class="match-dots">${dots}</div></div>
+      </div>`;
+    card.onclick = () => openModal(h, i);
     grid.appendChild(card);
   });
 }
 
-function filterCards(filter, el) {
-  activeFilter = filter;
+function filterDB(f, el) {
+  dbFilter = f;
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
-  renderCards();
+  renderDB();
 }
+function searchDB(v) { dbSearch = v; renderDB(); }
 
-function searchCards(val) {
-  searchTerm = val;
-  renderCards();
-}
-
-function openModal(h) {
-  document.getElementById('m-avatar').textContent = h.initials;
-  document.getElementById('m-avatar').style.background = h.color;
-  document.getElementById('m-avatar').style.color = '#333';
+function openModal(h, i) {
+  const av = document.getElementById('m-av');
+  av.innerHTML = `<img src="${h.photo}" alt="" onerror="this.remove()">`;
+  av.style.background = COLORS[i%COLORS.length];
   document.getElementById('m-name').textContent = h.name;
   document.getElementById('m-sub').textContent = h.id + ' · ' + h.suburb;
   document.getElementById('m-suburb').textContent = h.suburb;
@@ -999,14 +526,18 @@ function openModal(h) {
   document.getElementById('m-notes').textContent = h.notes;
   document.getElementById('modal').classList.add('open');
 }
+function closeModal(e) { if (e.target===document.getElementById('modal')) document.getElementById('modal').classList.remove('open'); }
 
-function closeModal(e) {
-  if (e.target === document.getElementById('modal')) {
-    document.getElementById('modal').classList.remove('open');
-  }
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  window.scrollTo(0,0);
 }
 
-renderCards();
+renderPublicHosts();
+renderDB();
 </script>
 </body>
 </html>
